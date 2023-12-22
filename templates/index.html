@@ -1,7 +1,18 @@
-{% extends "base.html"%}
+<!DOCTYPE html>
+<html lang="en">
 
-{% block content %}
-<button hx-get="/hello" hx-swap="outerHTML">Get some HTML</button>
+<head>
+  <title>todos</title>
+  <script src="https://unpkg.com/htmx.org@1.9.9"
+    integrity="sha384-QFjmbokDn2DjBjq+fM+8LUIVrAgqcNW2s0PjAxHETgRn9l4fvX31ZxDxvwQnyMOX"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="/style" type="text/css">
+</head>
 
-<button hx-get="/todo" hx-swap="outerHTML">Get list of todos</button>
-{% endblock %}
+<body>
+  <div id="content" class="bg-slate-700">
+    <button hx-get="/login" hx-swap="outerHTML" class="btn glass">Login</button>
+  </div>
+</body>
+
+</html>

@@ -10,7 +10,7 @@ struct ProtectedTemplate<'a> {
 }
 
 pub fn router() -> Router<()> {
-    Router::new().route("/", get(self::get::protected))
+    Router::new().route("/todo", get(self::get::protected))
 }
 
 mod get {

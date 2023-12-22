@@ -55,7 +55,7 @@ mod post {
         if let Some(ref next) = credentials.next {
             Redirect::to(next).into_response()
         } else {
-            Redirect::to("/").into_response()
+            Redirect::to("/todo").into_response()
         }
     }
 }
@@ -72,7 +72,7 @@ mod get {
 
     pub async fn logout(mut auth_session: AuthSession) -> impl IntoResponse {
         match auth_session.logout() {
-            Ok(_) => Redirect::to("/login").into_response(),
+            Ok(_) => Redirect::to("/").into_response(),
             Err(_) => StatusCode::INTERNAL_SERVER_ERROR.into_response(),
         }
     }

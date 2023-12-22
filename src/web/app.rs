@@ -1,8 +1,9 @@
 use anyhow::Result;
+use askama::Template;
 use axum::{
+    body::Body,
     error_handling::HandleErrorLayer,
-    http::StatusCode,
-    response::{Html, IntoResponse},
+    http::{Response, StatusCode},
     routing::get,
     BoxError,
 };
@@ -47,10 +48,8 @@ impl App {
 
         let app = protected::router()
             .route_layer(login_required!(Backend, login_url = "/login"))
-            .route(
-                "/style",
-                get(|| async { include_str!("../../static/dist.css") }),
-            )
+            .route("/", get(index))
+            .route("/style", get(style))
             .merge(auth::router())
             .layer(auth_service);
 
@@ -59,4 +58,20 @@ impl App {
 
         Ok(())
     }
+}
+
+async fn style() -> axum::response::Response {
+    Response::builder()
+        .status(StatusCode::OK)
+        .header("Content-Type", "text/css")
+        .body(Body::from(include_str!("../../static/dist.css")))
+        .unwrap()
+}
+
+#[derive(Template)]
+#[template(path = "index.html")]
+pub struct IndexTemplate {}
+
+async fn index() -> IndexTemplate {
+    IndexTemplate {}
 }
