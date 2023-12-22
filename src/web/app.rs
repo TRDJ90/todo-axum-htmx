@@ -1,12 +1,5 @@
 use anyhow::Result;
-use askama::Template;
-use axum::{
-    body::Body,
-    error_handling::HandleErrorLayer,
-    http::{Response, StatusCode},
-    routing::get,
-    BoxError,
-};
+use axum::{error_handling::HandleErrorLayer, http::StatusCode, BoxError};
 use axum_login::{
     login_required,
     tower_sessions::{Expiry, MemoryStore, SessionManagerLayer},
@@ -18,7 +11,7 @@ use tower::ServiceBuilder;
 
 use crate::{
     users::Backend,
-    web::{auth, protected},
+    web::{auth, index, protected},
 };
 
 pub struct App {
@@ -48,8 +41,7 @@ impl App {
 
         let app = protected::router()
             .route_layer(login_required!(Backend, login_url = "/login"))
-            .route("/", get(index))
-            .route("/style", get(style))
+            .merge(index::router())
             .merge(auth::router())
             .layer(auth_service);
 
@@ -58,20 +50,4 @@ impl App {
 
         Ok(())
     }
-}
-
-async fn style() -> axum::response::Response {
-    Response::builder()
-        .status(StatusCode::OK)
-        .header("Content-Type", "text/css")
-        .body(Body::from(include_str!("../../static/dist.css")))
-        .unwrap()
-}
-
-#[derive(Template)]
-#[template(path = "index.html")]
-pub struct IndexTemplate {}
-
-async fn index() -> IndexTemplate {
-    IndexTemplate {}
 }
