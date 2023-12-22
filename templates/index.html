@@ -1,0 +1,7 @@
+{% extends "base.html"%}
+
+{% block content %}
+<button hx-get="/hello" hx-swap="outerHTML">Get some HTML</button>
+
+<button hx-get="/todo" hx-swap="outerHTML">Get list of todos</button>
+{% endblock %}
